@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      .bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+      }
+      .bg__color {
+        background: #1d1e1e;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .bg__gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        background: linear-gradient(
+          45deg,
+          #2a3da6,
+          #2a3da6,
+          #cadeee,
+          #2a3da6,
+          #2a3da6
+        );
+        filter: blur(70px);
+        opacity: 0.27;
+        transform: translate(-20rem, 15rem);
+        width: calc(100% + 40rem);
+      }
+
+      .bg__canvas-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: translateY(10rem);
+        opacity: 0.27;
+        filter: blur(46px);
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg">
+      <div class="bg__color"></div>
+      <div class="bg__gradient"></div>
+      <div class="bg__canvas-wrapper">
+        <canvas id="canvas"></canvas>
+      </div>
+    </div>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      let w = ctx.canvas.width;
+      let h = ctx.canvas.height;
+
+      const MAX_LINES = 4;
+      const amplitude = 85;
+      const freq = 0.025;
+      let rate = 1;
+
+      let ctr = 0;
+      const draw = () => {
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = 300;
+        w = ctx.canvas.width;
+        h = ctx.canvas.height;
+        ctx.moveTo(0, h / 4);
+        ctr += 1;
+        for (let i = 1; i < MAX_LINES; i += 1) {
+          ctr += 1;
+          rate = ctr / 500;
+          ctx.beginPath();
+          for (let x = 0; x <= w; x += 300) {
+            const y = (Math.sin(x * freq * (i / 9) + rate) * amplitude) / i;
+            ctx.lineTo(x, y + h / 2);
+          }
+          ctx.strokeStyle = "#e6e9e7";
+          ctx.lineWidth = 7;
+          ctx.stroke();
+        }
+        window.requestAnimationFrame(draw);
+      };
+      draw();
+    </script>
+  </body>
+</html>
